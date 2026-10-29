@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="bn" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>চ্যালেঞ্জ রেস – ওমানি বিশ্বকোষ, ষষ্ঠ খণ্ড</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--plum:#3b1f5e;--rose:#ff7eb6;--violet:#8b6cf0;--teal:#2ec4b6;--sky:#6cb8ff;--gold:#ffd166;--ok:#27ae80;--bad:#e5546b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans Bengali','Segoe UI',Tahoma,sans-serif;color:var(--plum);min-height:100vh;
+  background:linear-gradient(135deg,#f9d9ff 0%,#d3dcff 45%,#c2f5e9 100%);background-attachment:fixed;overflow-x:hidden}
+.app{position:relative;max-width:980px;margin:0 auto;padding:16px 14px 40px}
+header{text-align:center;margin-bottom:8px}
+body{line-height:1.7}
+.title{font-size:clamp(26px,5.5vw,46px);font-weight:900;color:#fff;line-height:1.3;
+  text-shadow:0 1px 0 #b79cff,0 2px 0 #a98af5,0 3px 0 #9b79ee,0 4px 0 #8b6cf0,0 5px 0 #7a5bdc,0 6px 0 #6a4cc8,0 8px 6px rgba(59,31,94,.35),0 14px 22px rgba(59,31,94,.3)}
+.sub{font-weight:600;margin-top:4px;opacity:.85}
+.brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:4px;font-weight:700;font-size:14px}
+.brand img{height:42px;border-radius:12px;display:none}
+.hud{display:none;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.pill{background:rgba(255,255,255,.8);backdrop-filter:blur(6px);border-radius:999px;padding:5px 15px;font-weight:800;font-size:14.5px;border:0;font-family:inherit;color:inherit;
+  box-shadow:0 4px 0 rgba(139,108,240,.35),0 10px 16px rgba(59,31,94,.12)}
+.pill b{color:var(--violet)}
+button.pill{cursor:pointer}
+.screen{display:none}.screen.active{display:block}
+.panel{background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-radius:28px;padding:26px 22px;text-align:center;
+  box-shadow:0 8px 0 rgba(139,108,240,.3),0 24px 40px rgba(59,31,94,.18);max-width:640px;margin:18px auto}
+.panel h2{font-size:27px;font-weight:900;margin-bottom:8px}
+.panel p{font-weight:600;line-height:1.9;margin-bottom:6px}
+.stage-list{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 4px}
+.stage-list span{background:#fff;border-radius:14px;padding:4px 12px;font-weight:800;font-size:14px;box-shadow:0 4px 0 rgba(139,108,240,.35)}
+.btn{margin-top:14px;font-family:inherit;font-weight:900;font-size:20px;cursor:pointer;color:#fff;border:0;border-radius:18px;padding:12px 38px;
+  background:linear-gradient(180deg,#ff9cc9,var(--rose));box-shadow:0 6px 0 #d9498a,0 14px 20px rgba(217,73,138,.35);transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 #d9498a,0 4px 8px rgba(217,73,138,.3)}
+.btn:focus-visible,.opt:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
+
+/* ========= المشهد ثلاثي الأبعاد ========= */
+.stagebar{display:flex;justify-content:space-between;align-items:center;font-weight:900;margin-bottom:8px;gap:8px;flex-wrap:wrap}
+.scene-wrap{perspective:1100px}
+.scene{--sky1:#7ec8ff;--sky2:#d9f1ff;--ground:#f2d79a;--track:#c98a4b;
+  position:relative;height:clamp(290px,46vw,400px);border-radius:26px;overflow:hidden;
+  background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 38%,var(--ground) 38.1%,var(--ground) 100%);
+  box-shadow:0 10px 0 #5236b8,0 26px 36px rgba(59,31,94,.28);border:4px solid #fff;transform:rotateX(4deg);transform-origin:center bottom;transition:background .6s}
+.scene.s2{--sky1:#ffb27a;--sky2:#ffe7c4;--ground:#c9e8a0;--track:#c98a4b}
+.scene.s4{--sky1:#b79cff;--sky2:#f1e6ff;--ground:#e6cfa0;--track:#b97a4a}
+.scene.s3{--sky1:#4fd1c5;--sky2:#c9f6ef;--ground:#f6e3b0;--track:#d9a867}
+.back{position:absolute;left:0;right:0;top:0;height:40%;display:flex;align-items:flex-end;justify-content:space-around;font-size:clamp(30px,6vw,54px);padding-bottom:2px;filter:drop-shadow(0 6px 4px rgba(0,0,0,.2))}
+.back .big{font-size:clamp(56px,11vw,100px)}
+.cloud{position:absolute;top:8%;font-size:34px;opacity:.85;animation:drift 16s linear infinite}
+@keyframes drift{from{transform:translateX(-60px)}to{transform:translateX(60px)}}
+.track{position:absolute;left:0;right:0;bottom:0;height:68%}
+.track svg{position:absolute;inset:0;width:100%;height:100%}
+.flag{position:absolute;left:50%;top:-4%;transform:translateX(-50%);font-weight:900;font-size:13px;color:#fff;background:#d9498a;border-radius:10px;padding:1px 10px;box-shadow:0 3px 0 #a52e68;z-index:2}
+.runner{position:absolute;width:var(--rw,84px);height:calc(var(--rw,84px)*1.6);transform-origin:center bottom;
+  transition:left 1s cubic-bezier(.3,.8,.3,1),bottom 1s cubic-bezier(.3,.8,.3,1),transform 1s cubic-bezier(.3,.8,.3,1)}
+.runner svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 8px 6px rgba(0,0,0,.25))}
+.runner .tag{position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:#fff;border-radius:10px;padding:0 10px;font-weight:900;font-size:12px;white-space:nowrap;box-shadow:0 3px 0 rgba(139,108,240,.5)}
+.runner.me .tag{background:var(--gold)}
+.runner .leg,.runner .arm{transform-box:fill-box;transform-origin:top center}
+.runner.running svg{animation:bob .28s ease-in-out infinite alternate}
+.runner.running .l1,.runner.running .a2{animation:swing .28s ease-in-out infinite alternate}
+.runner.running .l2,.runner.running .a1{animation:swing .28s ease-in-out infinite alternate-reverse}
+@keyframes swing{from{transform:rotate(-26deg)}to{transform:rotate(26deg)}}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+.runner.win svg{animation:jump .5s ease-in-out infinite alternate}
+.runner.sprint svg{animation:bob .16s ease-in-out infinite alternate!important}
+.runner.sprint .l1,.runner.sprint .a2{animation:swing .16s ease-in-out infinite alternate!important}
+.runner.sprint .l2,.runner.sprint .a1{animation:swing .16s ease-in-out infinite alternate-reverse!important}
+.runner.stumble svg{animation:stumble .6s ease-in-out!important}
+@keyframes stumble{20%{transform:rotate(-12deg) translateX(-6px)}50%{transform:rotate(10deg) translateX(6px)}80%{transform:rotate(-5deg)}}
+@keyframes jump{to{transform:translateY(-18px) rotate(-3deg)}}
+
+/* ========= السؤال ========= */
+.qwrap{margin-top:22px;perspective:1200px}
+.qcard{--rx:0deg;--ry:0deg;position:relative;border-radius:26px;padding:24px 20px 18px;text-align:center;background:linear-gradient(160deg,#fff,#fbf3ff);border:4px solid var(--violet);
+  box-shadow:0 10px 0 #5236b8,0 24px 34px rgba(59,31,94,.25);transform:rotateX(var(--rx)) rotateY(var(--ry));transform-style:preserve-3d;transition:transform .15s ease-out}
+.qcard.enter{animation:flipin .6s cubic-bezier(.2,.8,.2,1.15)}
+@keyframes flipin{from{transform:rotateY(-90deg) scale(.85);opacity:0}to{transform:rotateY(0) scale(1);opacity:1}}
+.badge{position:absolute;top:-16px;left:18px;background:linear-gradient(180deg,#ffe08a,var(--gold));font-weight:900;border-radius:14px;padding:3px 14px;box-shadow:0 5px 0 #d9a92b,0 10px 14px rgba(0,0,0,.18);transform:translateZ(40px)}
+.qcount{position:absolute;top:-16px;right:18px;background:var(--violet);color:#fff;font-weight:800;border-radius:14px;padding:3px 14px;box-shadow:0 5px 0 #5236b8;transform:translateZ(40px)}
+.qtext{font-size:clamp(18px,3.2vw,24px);font-weight:900;line-height:1.7;margin-top:6px;transform:translateZ(20px)}
+.src{margin-top:8px;font-size:13.5px;font-weight:700;opacity:.8}
+.tbar{height:10px;border-radius:99px;background:#eadcff;margin-top:12px;overflow:hidden}
+.tbar span{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--teal),var(--gold),var(--bad));background-size:300% 100%;transition:width .1s linear}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px;perspective:1000px}
+.opt{--rx:0deg;--ry:0deg;--lift:0px;font-family:inherit;font-weight:800;font-size:16px;line-height:1.6;color:#fff;text-align:center;cursor:pointer;border:0;border-radius:20px;min-height:80px;padding:10px 14px;
+  text-shadow:0 2px 3px rgba(0,0,0,.25);background:linear-gradient(145deg,var(--a),var(--b));box-shadow:0 7px 0 var(--edge),0 16px 22px rgba(59,31,94,.22);
+  transform:rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--lift));transition:transform .15s ease-out}
+.opt .let{display:inline-block;background:rgba(255,255,255,.92);color:var(--plum);border-radius:50%;width:28px;height:28px;line-height:28px;margin-right:8px;text-shadow:none;font-size:14px}
+.opt:hover:not(:disabled){--lift:14px}
+.opt.ok{background:linear-gradient(145deg,#6ee7b7,var(--ok))!important;box-shadow:0 7px 0 #1b8a64,0 0 28px rgba(46,196,182,.75)!important;animation:pop .5s}
+.opt.bad{background:linear-gradient(145deg,#ff9aa9,var(--bad))!important;box-shadow:0 7px 0 #b33a4d!important;animation:shake .45s}
+.opt:disabled{cursor:default}.opt:disabled:not(.ok):not(.bad){opacity:.55}
+@keyframes pop{40%{transform:scale(1.07)}}
+@keyframes shake{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+.feedback{display:none;margin-top:20px;background:rgba(255,255,255,.9);border-radius:22px;padding:14px 18px;text-align:center;font-weight:700;line-height:1.9;
+  box-shadow:0 6px 0 rgba(139,108,240,.3),0 14px 22px rgba(59,31,94,.15)}
+.feedback.show{display:block;animation:flipin .45s}
+.verdict{font-size:19px;font-weight:900}
+.autobar{height:8px;border-radius:99px;background:#eadcff;margin-top:10px;overflow:hidden}
+.autobar span{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--violet),var(--rose));border-radius:99px}
+.autobar.go span{animation:autoFill var(--ad,3s) linear forwards}
+@keyframes autoFill{from{width:100%}to{width:0}}
+
+/* ========= نتيجة المرحلة ========= */
+.overlay{position:fixed;inset:0;z-index:60;background:rgba(59,31,94,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px}
+.overlay.show{display:flex}
+.overlay .panel{margin:0;animation:flipin .6s}
+.big-emoji{font-size:62px;display:inline-block;animation:spin3d 4s linear infinite}
+@keyframes spin3d{to{transform:rotateY(360deg)}}
+.stars{font-size:44px;letter-spacing:6px;margin:4px 0}
+.stat{display:inline-block;margin:4px 8px;font-weight:800}
+.review{text-align:left;margin-top:8px;font-size:14.5px}
+.review div{padding:3px 0;border-bottom:1px dashed rgba(139,108,240,.4)}
+.spark{position:fixed;z-index:120;pointer-events:none;font-size:22px;animation:burst 1s ease-out forwards}
+@keyframes burst{to{transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(.4);opacity:0}}
+.sign{font-weight:800;font-size:15px;color:var(--violet);margin-top:6px;text-shadow:0 1px 0 #fff}
+footer{text-align:center;margin-top:26px;font-weight:700;font-size:14px;opacity:.8}
+@media(max-width:640px){.opts{grid-template-columns:1fr;gap:14px}.scene{--rw:64px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1 class="title">🏁 চ্যালেঞ্জ রেস</h1>
+    <div class="sub">📚 ওমানি বিশ্বকোষ – ষষ্ঠ খণ্ড &nbsp;|&nbsp; চারটি ধাপ</div>
+    <div class="brand"><img src="student.jpeg" alt="" onload="this.style.display='block'"><span>সিরাজ ওমান দল – বালকিস স্কুল (৭-১০)</span></div>
+    <div class="sign">প্রস্তুত ও ডিজাইন: মারিয়া মুহাম্মদ আশ-শিবলী, নবম শ্রেণি</div>
+  </header>
+
+  <div class="hud" id="hud">
+    <div class="pill">⭐ পয়েন্ট: <b id="score">০</b></div>
+    <div class="pill">🔥 ধারাবাহিক: <b id="streak">০</b></div>
+    <button class="pill" id="soundBtn" aria-label="শব্দ চালু বা বন্ধ করুন">🔊 শব্দ</button>
+  </div>
+
+  <section class="screen active" id="startScreen">
+    <div class="panel">
+      <div id="startRunner" style="width:90px;height:144px;margin:0 auto"></div>
+      <h2>দৌড়ের জন্য তুমি কি প্রস্তুত?</h2>
+      <p>ওমানি শিক্ষার্থী ত্রিমাত্রিক ট্র্যাকে <b>গেমের</b> সাথে দৌড়ায়।<br>প্রতিটি সঠিক উত্তর তোমার নায়ককে ফিনিশ লাইনের দিকে এগিয়ে দেয় 🏃‍♂️</p>
+      <p>প্রতিটি ধাপ তার প্রশ্নগুলো শেষে শেষ হয়; গেমের আগে বা গেমের সাথে পৌঁছালে তুমি পরের ধাপে যাবে। প্রতিটি প্রশ্নের জন্য ২০ সেকেন্ড, আর প্রতিটি প্রশ্নে <b>ওমানি বিশ্বকোষ – ষষ্ঠ খণ্ড</b>-এর পৃষ্ঠা নম্বর দেওয়া আছে।</p>
+      <div class="stage-list"><span>🏰 ধাপ ১</span><span>🌴 ধাপ ২</span><span>⛵ ধাপ ৩</span><span>🏔️ ধাপ ৪</span></div>
+      <button class="btn" id="startBtn">শুরু করো!</button>
+    </div>
+  </section>
+
+  <section class="screen" id="gameScreen">
+    <div class="stagebar"><span id="stageName"></span><span id="raceStat"></span></div>
+    <div class="scene-wrap">
+      <div class="scene s1" id="scene">
+        <div class="cloud" style="left:12%">☁️</div><div class="cloud" style="left:62%;animation-delay:-6s">☁️</div>
+        <div class="back" id="back"></div>
+        <div class="track">
+          <svg viewBox="0 0 400 240" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <pattern id="chk" width="12" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="5" fill="#222"/><rect x="6" y="5" width="6" height="5" fill="#222"/><rect x="6" width="6" height="5" fill="#fff"/><rect y="5" width="6" height="5" fill="#fff"/></pattern>
+            </defs>
+            <polygon points="160,0 240,0 420,240 -20,240" fill="var(--track)" stroke="#fff" stroke-width="3"/>
+            <g stroke="rgba(255,255,255,.35)" stroke-width="2">
+              <line x1="146" y1="70" x2="254" y2="70"/><line x1="127" y1="105" x2="273" y2="105"/><line x1="96" y1="150" x2="304" y2="150"/><line x1="50" y1="210" x2="350" y2="210"/>
+            </g>
+            <line x1="200" y1="0" x2="200" y2="240" stroke="#fff" stroke-width="3" stroke-dasharray="14 12"/>
+            <polygon points="134.5,34 265.5,34 273,44 127,44" fill="url(#chk)"/>
+          </svg>
+          <div class="flag">🏁 ফিনিশ লাইন</div>
+          <div class="runner rival" id="rival"></div>
+          <div class="runner me" id="me"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qwrap">
+      <div class="qcard" id="qcard">
+        <span class="badge" id="badge"></span><span class="qcount" id="qcount"></span>
+        <div class="qtext" id="qtext"></div>
+        <div class="src" id="src"></div>
+        <div class="tbar"><span id="tbar"></span></div>
+      </div>
+      <div class="opts" id="opts"></div>
+      <div class="feedback" id="feedback">
+        <div class="verdict" id="verdict"></div>
+        <div id="note"></div>
+        <div class="autobar"><span id="autobar"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>সিরাজ ওমান দল – বালকিস স্কুল (৭-১০)<div class="sign">✍️ প্রস্তুত ও ডিজাইন: মারিয়া মুহাম্মদ আশ-শিবলী</div></footer>
+</div>
+
+<div class="overlay" id="overlay"><div class="panel" id="ovPanel"></div></div>
+
+<script>
+/* ============ প্রশ্ন (বইয়ের পৃষ্ঠা থেকে) ============ */
+const BOOK='ওমানি বিশ্বকোষ – ষষ্ঠ খণ্ড';
+const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const Q=[
+ /* ধাপ ১: পেশা ও কাজ */
+ {st:0,p:197,f:'ওয়াসম',q:'ওয়াসম অনুশীলনের সময় আগুনে কোন সরঞ্জামটি গরম করা হয়?',a:'মিসাম',w:['কাস্তে','লাঙল','খুরস'],note:'ওয়াসম একটি ঐতিহ্যবাহী চিকিৎসা পদ্ধতি, যাতে গরম করা ধাতব টুকরো—যাকে মিসাম বলে—দিয়ে চামড়া দাগানো হয়।'},
+ {st:0,p:196,f:'হিয়াসা',q:'হিয়াসায় জমি চাষের জন্য কোন প্রাণী ব্যবহার করা হয়?',a:'ষাঁড়',w:['গাধা','উট','ঘোড়া'],note:'হিয়াসা হলো ষাঁড় দিয়ে জমি চাষ করার ঐতিহ্যবাহী পেশা; এর সরঞ্জামের মধ্যে আছে লাঙল, জোয়াল ও দড়ি।'},
+ {st:0,p:184,f:'চামড়া পাকানো',q:'চামড়া পাকানোর কাজে প্রাণীর চামড়া ছাড়ানোর পর তার ওপর কী দেওয়া হয়?',a:'লবণ',w:['মধু','ঘি','আটা'],note:'চামড়া ছাড়ানোর পর তাতে লবণ দিয়ে রেখে দেওয়া হয়, তারপর গর্তে রাখা হয় এবং প্রায় দুই দিন পর বের করা হয়।'},
+ {st:0,p:184,f:'সাক্কায়ি',q:'সাক্কায়ি পেশায় পানি বহনের মাধ্যম হিসেবে সাধারণত কোন প্রাণী ব্যবহৃত হয়?',a:'গাধা',w:['ষাঁড়','উট','ভেড়া'],note:'সাক্কায়ি মিঠা পানির উৎস থেকে পানি এনে পারিশ্রমিকের বিনিময়ে বাড়িতে পৌঁছে দেন; সাধারণত গাধাই পানি বহনের মাধ্যম।'},
+ {st:0,p:181,f:'বাইদার',q:'বাইদার তার কাজে এগুলোর মধ্যে কোন সরঞ্জাম ব্যবহার করেন?',a:'কাস্তে',w:['মিসাম','মারাশ','হুজুল'],note:'বাইদারের সরঞ্জামের মধ্যে আছে কোদাল, কাস্তে, লাঙল ও ঝুড়ি।'},
+ /* ধাপ ২: যত্ন ও সাজসজ্জা */
+ {st:1,p:177,f:'মাহলাব',q:'মাহলাব কী দিয়ে তৈরি হয়?',a:'হলুদের শিকড়',w:['আল-আযাম গাছের পাতা','চন্দন কাঠ','শুকনো লাউয়ের খোসা'],note:'হলুদের শিকড় শুকিয়ে, পরিষ্কার করে ও পিষে মিহি গুঁড়া বানিয়ে মাহলাব তৈরি করা হয়।'},
+ {st:1,p:173,f:'নীলা',q:'নীলার মিশ্রণ গাঁজনের পর শেষে কোন রঙে স্থির হয়?',a:'নীল',w:['হলুদ','লাল','সবুজ'],note:'মিশ্রণের রং তিনবার বদলে তারপর নীলে স্থির হয়; নীলা আল-আযাম গাছ থেকে নিষ্কাশন করা হয়।'},
+ {st:1,p:176,f:'চন্দন',q:'চন্দন কাঠ সমতল পাথরে ঘষা হয়, তার সাথে মেশানো হয়...',a:'গোলাপজল',w:['দুধ','সমুদ্রের পানি','তেল'],note:'চন্দন কাঠের টুকরো সমতল পাথরে গোলাপজল মিশিয়ে ঘষা হয় এবং ত্বক ফর্সা ও পরিষ্কার করতে ব্যবহার করা হয়।'},
+ {st:1,p:171,f:'নাতাল',q:'নাতাল অলংকারটি কোন ধাতু দিয়ে তৈরি?',a:'সোনা বা রূপা',w:['শুধু তামা','লোহা','অ্যালুমিনিয়াম'],note:'নাতাল ওমানি নারীদের অলংকার, সোনা বা রূপায় তৈরি; একে নাতালা, ওয়াজাল ও খিনখালও বলা হয়।'},
+ {st:1,p:169,f:'হুজুল',q:'হুজুল কারা পরে?',a:'ছোট মেয়েরা ও নারীরা',w:['শুধু পুরুষরা','শুধু ছেলে শিশুরা','শুধু বৃদ্ধরা'],note:'হুজুল চ্যাপ্টা তারের তৈরি ছোট নূপুর, যা ছোট মেয়েরা ও নারীরা পরেন।'},
+ /* ধাপ ৩: পোশাক ও অলংকার */
+ {st:2,p:146,f:'উকাম',q:'নারীরা উকাম অলংকারটি কোথায় পরেন?',a:'মুখের নিচে',w:['মাথায়','গলায়','হাতে'],note:'উকাম নারীরা মুখের নিচে পরেন; এটি সোনা বা রূপায় তৈরি এবং এতে লম্বা কালো সুতা লাগানো থাকে।'},
+ {st:2,p:146,f:'নারীদের পোশাক',q:'ওমানি নারীদের পোশাকে বুকে পরার রূপার অলংকারটি কোনটি?',a:'আর-রাব্বা',w:['আস-সিবাত','আশ-শুবাইক','হাতের আংটি'],note:'আর-রাব্বা বুকে পরার রূপার অলংকার; আস-সিবাত ঐতিহ্যবাহী রূপার হার, আর আশ-শুবাইক মাথার অলংকার।'},
+ {st:2,p:149,f:'বুরকা',q:'বুরকা তৈরিতে কারা বিশেষজ্ঞ?',a:'বেদুইন নারীরা',w:['স্বর্ণকাররা (অলংকার নির্মাতা)','জেলেরা','কাঠমিস্ত্রিরা'],note:'বুরকা তৈরিতে বেদুইন নারীরা বিশেষজ্ঞ, কারণ এটি তাদের পোশাকের অপরিহার্য অংশ।'},
+ {st:2,p:164,f:'মুররিয়া',q:'বিভিন্ন অনুষ্ঠানে নারীরা মুররিয়া কোথায় পরেন?',a:'গলায়',w:['কোমরে','গোড়ালিতে','মাথায়'],note:'মুররিয়া নারীদের অলংকার, সারিবদ্ধ রূপার ছোট গুটি দিয়ে তৈরি; অনুষ্ঠানে নারীরা এটি গলায় পরেন।'},
+ {st:2,p:134,f:'পুরুষদের পোশাক',q:'নিচের কোনটি ওমানি পুরুষদের পোশাকের উপাদান?',a:'দিশদাশা, মিসর ও বিশত',w:['সাওব, খিমার ও সালোয়ার','বুরকা ও উকাম','আর-রাব্বা ও আস-সিবাত'],note:'পুরুষদের পোশাক দিশদাশা, মিসর (মাসার) ও বিশত নিয়ে গঠিত; সঙ্গে থাকে খঞ্জর, কোমরবন্ধ ও লাঠি।'},
+ /* ধাপ ৪: সরঞ্জাম, খাবার ও পুনরাবৃত্তি */
+ {st:3,p:374,f:'মাজিন',q:'মাংস সংরক্ষণের খাবার মাজিন কোন গভর্নরেটে প্রচলিত?',a:'ধোফার',w:['মাস্কাট','মুসান্দাম','উত্তর বাতিনা'],note:'মাজিন মাংস সংরক্ষণের ঐতিহ্যবাহী খাবার, ধোফার গভর্নরেটে প্রচলিত; এতে মাংস লবণে ঢেকে রাখা হয়।'},
+ {st:3,p:120,f:'মিখরাফা',q:'মিখরাফা কী দিয়ে তৈরি হয়?',a:'খেজুর পাতা',w:['চামড়া','মাটির পাত্র','রূপা'],note:'মিখরাফা খেজুর পাতার তৈরি ঝুড়ি, যা খেজুর, আম ও লেবু তোলা ও বহনের কাজে ব্যবহৃত হয়।'},
+ {st:3,p:122,f:'মারাশ',q:'মারাশের ব্যবহার কী?',a:'অনুষ্ঠানে আতর ও গোলাপজল ছিটানো',w:['খেজুর ও শস্য সংরক্ষণ','আফলাজ (সেচ খাল) থেকে পানি আনা','খাবার ঢেকে রাখা'],note:'মারাশ রূপার তৈরি ছিটানি পাত্র, বিয়ের মতো অনুষ্ঠানে আতর ও গোলাপজল ছিটাতে ব্যবহৃত হয়।'},
+ {st:3,p:197,f:'ওয়াসম',q:'ওয়াসম কী?',a:'চামড়া দাগিয়ে চিকিৎসার ঐতিহ্যবাহী পদ্ধতি',w:['মাছ ধরার জাল তৈরির পেশা','কুরআন খতমের উৎসব','মাংস সংরক্ষণের খাবার'],note:'ওয়াসম ওমানে প্রাচীনকাল থেকে প্রচলিত ঐতিহ্যবাহী চিকিৎসা, যাতে গরম ধাতব টুকরো দিয়ে চামড়া দাগানো হয়।'},
+ {st:3,p:146,f:'নারীদের পোশাক',q:'ওমানি নারীদের সাজসজ্জায় অনুষ্ঠানে হাত ও পায়ে কী আঁকা হয়?',a:'মেহেদির নকশা',w:['মুররিয়া হার','হুজুল','বুরকা'],note:'নারীদের পোশাক ও সাজসজ্জার অংশ হলো মেহেদির নকশা, যা অনুষ্ঠানে হাত ও পায়ে আঁকা হয়।'}
+];
+const STAGES=[
+ {name:'🏰 প্রথম ধাপ: পেশা ও কাজ',cls:'s1',n:5,rival:.40,back:['🌴','🏰','🌴'],big:1},
+ {name:'🌴 দ্বিতীয় ধাপ: যত্ন ও সাজসজ্জা',cls:'s2',n:5,rival:.50,back:['🌴','🌴','⛰️','🌴','🌴'],big:2},
+ {name:'⛵ তৃতীয় ধাপ: পোশাক ও অলংকার',cls:'s3',n:5,rival:.60,back:['🌴','⛵','🌊','⛵','🌴'],big:1},
+ {name:'🏔️ চতুর্থ ধাপ: সরঞ্জাম ও খাবার',cls:'s4',n:5,rival:.70,back:['⛰️','🏰','⛰️','🌴'],big:1}
+];
+const PALETTE=[{a:'#ff7eb6',b:'#ff5fa2',edge:'#d9498a'},{a:'#8b6cf0',b:'#6f4fe0',edge:'#5236b8'},{a:'#2ec4b6',b:'#1ea89b',edge:'#157f75'},{a:'#ffa45e',b:'#ff8a3d',edge:'#d06a22'}];
+const LETTERS=['ক','খ','গ','ঘ'];
+const QTIME=20;
+
+/* ============ شخصية الطالب: دشداشة وكُمّة عُمانية ============ */
+function boy(th,kb,ka){return `<svg viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="50" cy="153" rx="27" ry="5" fill="rgba(0,0,0,.28)"/>
+<g class="leg l1"><rect x="36" y="126" width="12" height="22" rx="5" fill="#e9b48a"/><rect x="32" y="144" width="19" height="8" rx="4" fill="#7a4a2a"/></g>
+<g class="leg l2"><rect x="52" y="126" width="12" height="22" rx="5" fill="#e9b48a"/><rect x="49" y="144" width="19" height="8" rx="4" fill="#7a4a2a"/></g>
+<g class="arm a1"><path d="M31 70 L20 108" stroke="${th}" stroke-width="11" stroke-linecap="round"/><circle cx="19" cy="111" r="6" fill="#e9b48a"/></g>
+<g class="arm a2"><path d="M69 70 L80 108" stroke="${th}" stroke-width="11" stroke-linecap="round"/><circle cx="81" cy="111" r="6" fill="#e9b48a"/></g>
+<path d="M29 68 Q50 58 71 68 L77 138 Q50 146 23 138 Z" fill="${th}" stroke="#cfcfe4" stroke-width="1.5"/>
+<path d="M43 62 L50 80 L57 62 Z" fill="#f4f4fc" stroke="#cfcfe4"/>
+<line x1="50" y1="80" x2="50" y2="98" stroke="#8a5a2b" stroke-width="2.6"/><circle cx="50" cy="100" r="3.6" fill="#8a5a2b"/>
+<circle cx="50" cy="110" r="1.6" fill="#b9b9d2"/><circle cx="50" cy="120" r="1.6" fill="#b9b9d2"/>
+<rect x="44" y="52" width="12" height="12" fill="#e9b48a"/>
+<ellipse cx="30" cy="41" rx="3.2" ry="5" fill="#e9b48a"/><ellipse cx="70" cy="41" rx="3.2" ry="5" fill="#e9b48a"/>
+<circle cx="50" cy="38" r="20" fill="#e9b48a"/>
+<path d="M29 36 Q28 9 50 9 Q72 9 71 36 Z" fill="${kb}"/>
+<rect x="29" y="28" width="42" height="9" fill="${ka}"/>
+<path d="M34 32.5l3-3.5 3 3.5-3 3.5zM42 32.5l3-3.5 3 3.5-3 3.5zM50 32.5l3-3.5 3 3.5-3 3.5zM58 32.5l3-3.5 3 3.5-3 3.5z" fill="#fff"/>
+<path d="M35 22L39 16 43 22 47 16 51 22 55 16 59 22 63 16" stroke="#fff" stroke-width="1.7" fill="none" stroke-linejoin="round"/>
+<circle cx="50" cy="9.5" r="2.6" fill="${ka}"/>
+<circle cx="43" cy="44" r="2.8" fill="#2b1a10"/><circle cx="57" cy="44" r="2.8" fill="#2b1a10"/><circle cx="44" cy="43" r=".9" fill="#fff"/><circle cx="58" cy="43" r=".9" fill="#fff"/>
+<path d="M39 38.5Q43 36.5 47 38.5M53 38.5Q57 36.5 61 38.5" stroke="#2b1a10" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<path d="M43 51Q50 57 57 51" stroke="#8a3b2a" stroke-width="2" fill="none" stroke-linecap="round"/>
+<circle cx="38" cy="50" r="3" fill="#ff9aa9" opacity=".5"/><circle cx="62" cy="50" r="3" fill="#ff9aa9" opacity=".5"/>
+</svg>`}
+const ME=boy('#ffffff','#fbf6ea','#c0392b');
+const RIVAL=boy('#cfe8ff','#e8f7e8','#1e8f6a');
+
+/* ============ أدوات ============ */
+const $=s=>document.querySelector(s);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let soundOn=true,ac;
+function tone(f,s,d,t='sine',v=.18){if(!soundOn)return;ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t;o.frequency.value=f;const T=ac.currentTime+s;g.gain.setValueAtTime(v,T);g.gain.exponentialRampToValueAtTime(.001,T+d);o.connect(g);g.connect(ac.destination);o.start(T);o.stop(T+d)}
+const sfx={pick(){tone(520,0,.08,'triangle',.12)},ok(){tone(660,0,.12);tone(880,.1,.12);tone(1175,.2,.22)},bad(){tone(220,0,.18,'sawtooth',.14);tone(160,.15,.25,'sawtooth',.14)},win(){[523,659,784,1047,1319].forEach((f,i)=>tone(f,i*.13,.3,'triangle',.2))},tick(){tone(900,0,.05,'square',.06)}};
+$('#soundBtn').onclick=e=>{soundOn=!soundOn;e.currentTarget.textContent=soundOn?'🔊 শব্দ':'🔇 নীরব'};
+$('#startRunner').innerHTML=`<div class="runner win" style="position:relative;width:90px;height:144px">${ME}</div>`;
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id))}
+
+/* ميلان بطاقة السؤال */
+const qc=$('#qcard');
+qc.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;const r=qc.getBoundingClientRect();qc.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*7+'deg');qc.style.setProperty('--rx',-((e.clientY-r.top)/r.height-.5)*7+'deg')});
+qc.addEventListener('pointerleave',()=>{qc.style.setProperty('--rx','0deg');qc.style.setProperty('--ry','0deg')});
+
+/* ============ موضع العدّائين على المضمار (منظور) ============ */
+const me=$('#me'),rival=$('#rival');
+me.innerHTML=`<span class="tag">তুমি</span>${ME}`;rival.innerHTML=`<span class="tag">গেম</span>${RIVAL}`;
+function place(el,t,lane){
+  const yb=4+t*80;                       // % من ارتفاع المضمار
+  const w=1-0.8*(yb/100);                // عرض المضمار عند هذه المسافة
+  const x=50+lane*w*25;                  // % من العرض
+  const s=0.38+0.62*(1-yb/100);          // تصغير مع البعد
+  el.style.left=x+'%';el.style.bottom=yb+'%';
+  el.style.transform=`translateX(-50%) scale(${s})`;
+  el.style.zIndex=Math.round(100-yb);
+}
+function run(el,on){el.classList.toggle('running',on)}
+function burst(el,cls,ms){el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),ms)}
+let nextTid=null;
+
+/* ============ مسار اللعبة ============ */
+let stages,si,qi,sc,rc,score,streak,totalRight,missed,timerId,tleft,answered,wins;
+
+function startGame(){
+  stages=STAGES.map((s,i)=>shuffle(Q.filter(q=>q.st===i)));
+  si=0;score=0;streak=0;totalRight=0;missed=[];wins=0;
+  $('#hud').style.display='flex';upd();
+  show('gameScreen');startStage();
+}
+function startStage(){
+  const cfg=STAGES[si];qi=0;sc=0;rc=0;
+  $('#scene').className='scene '+cfg.cls;
+  $('#stageName').textContent=cfg.name;
+  $('#back').innerHTML=cfg.back.map((e,i)=>`<span class="${i===cfg.big?'big':''}">${e}</span>`).join('');
+  clearTimeout(nextTid);me.classList.remove('win','sprint','stumble');rival.classList.remove('win','sprint');run(me,true);run(rival,true);
+  me.style.transition=rival.style.transition='none';place(me,0,-1);place(rival,0,1);
+  void me.offsetWidth;me.style.transition=rival.style.transition='';
+  raceStat();loadQ();
+}
+function raceStat(){const n=STAGES[si].n;$('#raceStat').textContent=`তুমি ${bn(sc)}/${bn(n)}  ⟷  গেম ${bn(rc)}/${bn(n)}`}
+function loadQ(){
+  answered=false;const d=stages[si][qi],n=STAGES[si].n;
+  $('#badge').textContent=`📖 পৃ. ${bn(d.p)}`;$('#qcount').textContent=`প্রশ্ন ${bn(qi+1)} / ${bn(n)}`;
+  $('#qtext').textContent=d.q;
+  $('#src').textContent=`📚 ${BOOK} – পৃষ্ঠা ${bn(d.p)}`;
+  qc.classList.remove('enter');void qc.offsetWidth;qc.classList.add('enter');
+  const box=$('#opts');box.innerHTML='';
+  shuffle([d.a,...d.w]).forEach((t,i)=>{
+    const p=PALETTE[i],b=document.createElement('button');
+    b.className='opt';b.style.cssText=`--a:${p.a};--b:${p.b};--edge:${p.edge}`;
+    b.innerHTML=`<span class="let">${LETTERS[i]}</span>${t}`;b.dataset.c=(t===d.a);
+    b.onclick=()=>answer(b);
+    b.addEventListener('pointermove',e=>{if(b.disabled||e.pointerType==='touch')return;const r=b.getBoundingClientRect();b.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*14+'deg');b.style.setProperty('--rx',-((e.clientY-r.top)/r.height-.5)*14+'deg')});
+    b.addEventListener('pointerleave',()=>{b.style.setProperty('--rx','0deg');b.style.setProperty('--ry','0deg')});
+    box.appendChild(b);
+  });
+  $('#feedback').classList.remove('show');
+  clearTimeout(nextTid);$('#autobar').parentElement.classList.remove('go');
+  startTimer();
+}
+function startTimer(){
+  clearInterval(timerId);tleft=QTIME;$('#tbar').style.width='100%';
+  timerId=setInterval(()=>{tleft-=.1;$('#tbar').style.width=Math.max(0,tleft/QTIME*100)+'%';
+    if(Math.abs(tleft-Math.round(tleft))<.05&&tleft<=5&&tleft>0)sfx.tick();
+    if(tleft<=0){clearInterval(timerId);answer(null)}},100);
+}
+function answer(btn){
+  if(answered)return;answered=true;clearInterval(timerId);
+  const d=stages[si][qi],cfg=STAGES[si],n=cfg.n;
+  const all=[...document.querySelectorAll('.opt')];all.forEach(o=>o.disabled=true);
+  all.forEach(o=>{if(o.dataset.c==='true')o.classList.add('ok')});
+  const good=btn&&btn.dataset.c==='true';
+  if(good){
+    sc++;streak++;totalRight++;score+=10+Math.ceil(tleft/2)+Math.min(streak-1,5)*2;sfx.ok();spark(btn);
+    $('#verdict').textContent=['চমৎকার! তোমার নায়ক এগিয়ে যাচ্ছে 🏃‍♂️','দারুণ! দৌড়ে চলো 🌟','অসাধারণ! 💨'][Math.floor(Math.random()*3)];
+    place(me,sc/n,-1);burst(me,'sprint',1100);
+  }else{
+    streak=0;sfx.bad();if(btn)btn.classList.add('bad');burst(me,'stumble',650);
+    missed.push({f:d.f,p:d.p});
+    $('#verdict').textContent=btn?'ভুল উত্তর, সমস্যা নেই! 💪':'সময় শেষ ⏰';
+  }
+  if(Math.random()<cfg.rival){rc++;place(rival,rc/n,1);burst(rival,'sprint',1100)}
+  upd();raceStat();
+  $('#note').innerHTML=`${d.note}<br><b>📚 ${BOOK} – পৃষ্ঠা ${bn(d.p)}</b>`;
+  /* পরের প্রশ্নে স্বয়ংক্রিয় যাওয়া */
+  const delay=btn?3200:1600;
+  setTimeout(()=>$('#feedback').classList.add('show'),btn?450:150);
+  const bar=$('#autobar').parentElement;bar.style.setProperty('--ad',delay+'ms');bar.classList.remove('go');void bar.offsetWidth;bar.classList.add('go');
+  clearTimeout(nextTid);
+  nextTid=setTimeout(()=>{qi++;if(qi>=STAGES[si].n)endStage();else loadQ()},delay);
+}
+
+function endStage(){
+  const n=STAGES[si].n,pass=sc>=rc&&sc>=Math.ceil(n/2),last=si===STAGES.length-1;
+  const ov=$('#overlay'),p=$('#ovPanel');
+  if(pass){
+    wins++;sfx.win();run(me,false);me.classList.add('win');if(sc>rc)rival.classList.remove('win');
+    for(let i=0;i<4;i++)setTimeout(confetti,i*250);
+    p.innerHTML=`<div class="big-emoji">🏆</div><h2>${last?'তুমি পুরো চ্যালেঞ্জ শেষ করেছ!':'তুমি ধাপটি জিতেছ!'}</h2>
+      <p>তুমি: <b>${bn(sc)}/${bn(n)}</b> &nbsp;|&nbsp; গেম: <b>${bn(rc)}/${bn(n)}</b></p>
+      <button class="btn" id="ovBtn">${last?'চূড়ান্ত ফলাফল দেখো':'পরের ধাপ ▶'}</button>`;
+    $('#overlay').classList.add('show');
+    $('#ovBtn').onclick=()=>{ov.classList.remove('show');if(last)finish();else{si++;startStage()}};
+  }else{
+    sfx.bad();
+    p.innerHTML=`<div class="big-emoji">💪</div><h2>এবার গেম তোমাকে ছাড়িয়ে গেছে</h2>
+      <p>তুমি: <b>${bn(sc)}/${bn(n)}</b> &nbsp;|&nbsp; গেম: <b>${bn(rc)}/${bn(n)}</b></p>
+      <p>প্রশ্নে উল্লেখ করা বিশ্বকোষের পৃষ্ঠাগুলো পড়ে আবার চেষ্টা করো!</p>
+      <button class="btn" id="ovBtn">ধাপটি আবার খেলো 🔁</button>`;
+    ov.classList.add('show');
+    $('#ovBtn').onclick=()=>{ov.classList.remove('show');stages[si]=shuffle(stages[si]);startStage()};
+  }
+}
+function finish(){
+  const total=Q.length,acc=totalRight/total;
+  const st=acc>=.85?3:acc>=.6?2:1;
+  const seen=new Map();missed.forEach(m=>seen.set(m.f,m.p));
+  $('#ovPanel').innerHTML=`<div class="big-emoji">🥇</div><h2>রেসের চ্যাম্পিয়ন!</h2>
+    <div class="stars">${'⭐'.repeat(st)+'☆'.repeat(3-st)}</div>
+    <p><span class="stat">⭐ পয়েন্ট: <b>${bn(score)}</b></span><span class="stat">✅ সঠিক উত্তর: <b>${bn(totalRight)}</b></span></p>
+    <div class="review">${seen.size?'<b>পুনরায় পড়ার জন্য '+BOOK+'-এ দেখো:</b>'+[...seen].map(([f,p])=>`<div>📖 ${f} – পৃষ্ঠা ${bn(p)}</div>`).join(''):'<b>🎉 তুমি একটি প্রশ্নেও ভুল করোনি!</b>'}</div>
+    <div class="sign">✍️ প্রস্তুত ও ডিজাইন: মারিয়া মুহাম্মদ আশ-শিবলী, নবম শ্রেণি</div><button class="btn" id="ovBtn">আবার খেলো</button>`;
+  $('#overlay').classList.add('show');sfx.win();for(let i=0;i<5;i++)setTimeout(confetti,i*250);
+  $('#ovBtn').onclick=()=>{$('#overlay').classList.remove('show');startGame()};
+}
+function upd(){$('#score').textContent=bn(score);$('#streak').textContent=bn(streak)}
+function spark(el){const r=el.getBoundingClientRect(),ic=['✨','🌟','💜','⭐','🎉'];
+ for(let i=0;i<10;i++){const s=document.createElement('span');s.className='spark';s.textContent=ic[i%5];s.style.left=(r.left+r.width/2)+'px';s.style.top=(r.top+r.height/2)+'px';
+  s.style.setProperty('--x',(Math.random()*260-130)+'px');s.style.setProperty('--y',(Math.random()*200-140)+'px');s.style.setProperty('--r',Math.random()*360+'deg');document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}}
+function confetti(){const ic=['🎉','✨','🌟','💜','⭐','🎀'];
+ for(let i=0;i<14;i++){const s=document.createElement('span');s.className='spark';s.textContent=ic[Math.floor(Math.random()*ic.length)];s.style.left=Math.random()*100+'vw';s.style.top='-20px';
+  s.style.setProperty('--x',(Math.random()*120-60)+'px');s.style.setProperty('--y',(innerHeight+40)+'px');s.style.setProperty('--r',Math.random()*720+'deg');s.style.animationDuration=(1.6+Math.random())+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),2700)}}
+$('#startBtn').onclick=startGame;
+</script>
+</body>
+</html>
